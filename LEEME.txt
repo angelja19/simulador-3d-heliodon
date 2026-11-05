@@ -1,0 +1,141 @@
+==================================================================
+  HELIODÓN UMSS - SIMULADOR 3D DEL HELIODÓN PEQUEÑO
+  (diseño del 05/11/2026: marco cuadrado, 95 cm de ancho, tubos de
+   25x25, aro de 90° N a 90° S y caja del Arduino colgada con puerta)
+==================================================================
+
+ABRIR
+-----
+  Doble clic en  index.html  (Brave, Chrome, Edge o Firefox).
+  Funciona 100 % sin internet: Three.js está copiado en la carpeta lib
+  y no se carga nada de afuera (ni fuentes ni librerías).
+
+QUÉ MUESTRA
+-----------
+  - El heliodón completo con las medidas del ensamble de SolidWorks:
+    estructura de 1200 x 950 mm de tubo 25x25x2 SIN diagonales, con un
+    marco cuadrado cerrado a 520 mm del piso (travesaños medios de los
+    caballetes + tubos 111 de las caras Norte y Sur), ruedas con freno
+    sobre placas adaptadoras (112), aro con el graduador de latitud
+    (se inclina de 90° N a 90° S), carro, foco, mesa giratoria Ø640
+    (cara superior a 900 mm del piso) y la maqueta.
+  - Casa de 5 cuartos con techos que se quitan, 5 sensores de luz
+    BH1750 y 5 DS18B20 con etiquetas C1 a C5 (luz y temperatura).
+  - Caja del Arduino COLGADA bajo el tubo 105 (el que sostiene la
+    mesa), junto al pin central, con 2 abrazaderas (305c). Techo
+    cerrado y PUERTA FRONTAL (305b) con los 3 LED, bisagra al lado
+    Oeste; el botón «Caja» abre la puerta 85° hacia adelante.
+    Adentro: Arduino UNO, módulo de relés, TCA9548A, placa del bus
+    1-Wire y la parte de 220 V, con cada cable en su pin real.
+  - Cables con colores por tipo y por dentro de los tubos, con los
+    recorridos de SolidWorks:
+      12 hilos de los BH1750 (308d): pin → plato → tubo 105 → caja
+      bus 1-Wire de los DS18B20 (312): empalme bajo la mesa → tubo 105 → caja
+      foco (310): eje Este del aro → caballete Este → tubo 105 → caja
+      alimentación 220 V (310): caja → tubo 105 → caballete Este →
+        prensaestopas en el montante Sur (30 cm del piso) → enchufe
+      USB (311): Arduino → tubo 105 → caballete Oeste → USB-B de panel
+        en el montante Norte (23 cm del piso) → cable a la laptop
+  - La maqueta se levanta por el pin y se ven los cables colgando.
+
+MODO PIEZAS (botón «Piezas» del dock o tecla M)
+-----------------------------------------------
+  Separa y muestra cada pieza mecánica con sus medidas reales (sin
+  electrónica ni cables): 58 piezas, cada tubo de la estructura por
+  separado (largueros, cabezales, montantes, travesaños, marco medio,
+  tubo 105 y 106), ruedas (placa, horquilla, llanta, freno), placas
+  adaptadoras, tornillería, chumaceras, ejes, aro, graduador (placa,
+  brazo, manija T), carro, arco de declinación, portafoco, foco, plato,
+  mesa, maqueta, pin central, techos, caja del Arduino (cuerpo,
+  puerta, perilla, abrazaderas, bisagras, cierre, tornillos y
+  separadores), pasacables, prensaestopas, caja de empalme y puentes
+  de los BH1750.
+  - Clic en una pieza (o en la lista de la derecha): se aísla (el resto
+    transparente u oculto), la cámara la centra y aparecen sus cotas
+    en 3D en mm. Si hay varias iguales (ruedas, pernos), los botones
+    1, 2, 3… eligen cuál y «Todas» las muestra juntas.
+  - Ficha (izquierda): nombre y número de SolidWorks, medidas, material,
+    masa y cantidad. Lo que no está en los datos dice «pendiente».
+  - ‹ › o las flechas ← → pasan a la pieza anterior o siguiente;
+    «Ensamble completo» (o Esc) vuelve a ver todas; «Salir» (o M) sale.
+  - «Vista explosionada» separa solo las piezas mecánicas y pone el
+    nombre de cada una (clic en un nombre para ir a la pieza).
+  Las medidas salen de datos_generados.js (ensamble de SolidWorks), de
+  los macros de a\macros (01_piezas, 30c, 35a), del registro de
+  ejecución (masa y material) y de la lista de materiales.
+
+USO CON EL MOUSE
+----------------
+  Girar la cámara ......... arrastrar con el botón izquierdo
+  Mover la cámara ......... botón derecho (o Mayús + arrastrar)
+  Acercar / alejar ........ rueda del mouse
+  Latitud ................. arrastrar arriba o abajo la manija en T del
+                            graduador (lado Este del aro): de 90° N a
+                            90° S; botones Polo Norte y Polo Sur
+  Hora .................... arrastrar el foco a lo largo del aro
+  Girar la maqueta ........ arrastrarla hacia los lados
+  Información ............. pasar el mouse sobre cualquier pieza o cable:
+                            nombre, función y pin o canal donde va
+  Ir a un componente ...... panel derecho > Componentes > clic
+
+PANELES Y BOTONES
+-----------------
+  Controles (izquierda): latitud, hora, fecha (declinación), foco,
+    giro de la maqueta, levantarla, techos, etiquetas y vistas.
+  Derecha: Cuartos (lux y °C de C1 a C5), Componentes (toda la lista
+    del ensamble de SolidWorks y de Lista_de_materiales_Arduino.xlsx,
+    con buscador) y Cables (colores por tipo; clic = resaltar).
+  Dock (abajo, estilo Apple): Inicio · Foco · Techos · Levantar ·
+    Cables · Rayos X · Explosión · Conexiones · Caja · Piezas · Paneles.
+  Botón de la luna (arriba): modo claro / oscuro.
+  Teclas: F foco, T techos, L levantar, C cables, X rayos X,
+    E explosión, K conexiones, A caja (puerta), P paneles, M piezas
+    (en el modo Piezas: ← → pieza anterior o siguiente),
+    Esc vista inicial.
+
+QUÉ SIMULA
+----------
+  - El Sol del heliodón: aro inclinado según la latitud, carro a
+    15°/h, arco de declinación según la fecha. El foco ilumina la
+    maqueta y proyecta sombras.
+  - Luz de cada cuarto (lux): luz por arriba según la altura del Sol
+    + luz por los muros exteriores según el azimut (mañana: Este;
+    tarde: Oeste). Temperatura: sube con la luz (inercia ~1 min).
+
+ARCHIVOS
+--------
+  index.html ............... página principal
+  css\estilos.css .......... diseño (vidrio esmerilado, claro/oscuro)
+  js\datos_generados.js .... lista de materiales, conexiones, piezas de
+                             SolidWorks y posición de cada componente del
+                             ensamble con los recorridos de los cables
+                             (lo genera herramientas\generar_datos.py)
+  js\datos.js .............. cuartos y tipos de cable
+  js\geometria.js .......... medidas del ensamble (H.DIM), utilidades 3D
+                             y registro de componentes
+  js\simulacion.js ......... Sol, luz y temperatura
+  js\modelo.js ............. estructura, mecanismo, mesa y maqueta
+  js\electronica.js ........ caja colgada, puerta, electrónica y cables
+  js\camara.js ............. cámara orbital y vuelos animados
+  js\interfaz.js, js\app.js  paneles, interacción y bucle principal
+  lib\three.min.js ......... Three.js r147 (licencia MIT)
+  herramientas\ ............ generar_datos.py, prueba_cuerpo.js y
+                             prueba_playwright.js
+  capturas\ ................ capturas y resultados de las pruebas
+
+ACTUALIZAR LOS DATOS
+--------------------
+  Si cambia el Excel o el ensamble de SolidWorks:
+    python herramientas\generar_datos.py
+  (las piezas y el ensamble se abren en SOLO LECTURA y se cierran sin
+   guardar: no se modifica ningún archivo de SolidWorks)
+
+PRUEBAS (05/11/2026)
+--------------------
+  MCP de Playwright ...... capturas\resultado_prueba_mcp_playwright.txt
+  Brave 156 .............. capturas\resultado_prueba_brave.txt
+    (node herramientas\prueba_playwright.js     --edge = con Edge)
+  05/11/2026 (tubos 25x25, aro de 90° N a 90° S, mesa Ø640):
+  46 comprobaciones TODO OK en el MCP de Playwright, consola sin
+  errores ni advertencias, ~60 cuadros/s.
+==================================================================
