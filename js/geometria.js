@@ -92,6 +92,9 @@
     return obj;
   };
 
+  /** Pantalla angosta (celular): el ángulo de visión horizontal es menor, la cámara se aleja en esa proporción. */
+  H.movil = () => window.matchMedia("(max-width: 700px)").matches;
+  H.factorPantalla = () => { const a = window.innerWidth / window.innerHeight; return a < 1 ? Math.min(2.3, 0.9 / a) : 1; };
   /** Marca un objeto (y sus hijos) como subpieza mecánica: el modo «Piezas» la puede aislar sola (un tubo, el pin...). */
   H.tagPieza = function (obj, clave) { obj.traverse((o) => { o.userData.piezaTag = clave; }); return obj; };
 

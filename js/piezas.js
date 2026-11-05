@@ -580,9 +580,9 @@
     if (b.isEmpty()) return;
     const c = b.getCenter(new THREE.Vector3());
     const s = b.getSize(new THREE.Vector3()).length();
-    const ancho = window.innerWidth - (document.body.classList.contains("sin-paneles") ? 0 : 660);
-    const f = Math.max(1, window.innerWidth / Math.max(420, ancho));        // deja espacio a los paneles
-    app.orbita.volarA(c, Math.min(4.2, Math.max(0.07, s * 1.45 * f)), null, null, 950);
+    const ancho = window.innerWidth - (H.movil() || document.body.classList.contains("sin-paneles") ? 0 : 660);
+    const f = Math.max(1, window.innerWidth / Math.max(420, ancho)) * H.factorPantalla();   // deja espacio a los paneles; celular vertical: más lejos
+    app.orbita.volarA(c, Math.min(5.5, Math.max(0.07, s * 1.45 * f * (H.movil() ? 1.3 : 1))), null, null, 950);
   }
 
   // ------------------------------------------------------------------ interfaz
@@ -686,7 +686,7 @@
       PZ.sel = null;
       ficha();
       objetivos();
-      app.orbita.volarA(new THREE.Vector3(0, 0.66, 0), 3.0, null, 1.05);
+      app.orbita.volarA(new THREE.Vector3(0, 0.66, 0), 3.0 * H.factorPantalla(), null, 1.05);
       H.UI.aviso("Modo Piezas: toque una pieza para aislarla y ver sus medidas", 3200);
       app.sincronizar();
     },
@@ -730,7 +730,7 @@
       PZ.sel = null;
       borrarCotas();
       objetivos(); ficha(); marcarLista();
-      H.app.orbita.volarA(new THREE.Vector3(0, PZ.explosion ? 0.72 : 0.66, 0), PZ.explosion ? 4.0 : 3.0, null, 1.05);
+      H.app.orbita.volarA(new THREE.Vector3(0, PZ.explosion ? 0.72 : 0.66, 0), (PZ.explosion ? 4.0 : 3.0) * H.factorPantalla(), null, 1.05);
     },
     paso(d) {
       const vis = P.filter((e) => e.n);
@@ -743,7 +743,7 @@
       if (PZ.explosion) { prepararExplosion(); crearEtiquetas(); }
       $("#pz-t-exp").checked = PZ.explosion;
       H.app.sincronizar();
-      if (!PZ.sel) H.app.orbita.volarA(new THREE.Vector3(0, PZ.explosion ? 0.72 : 0.66, 0), PZ.explosion ? 4.0 : 3.0, null, 1.05);
+      if (!PZ.sel) H.app.orbita.volarA(new THREE.Vector3(0, PZ.explosion ? 0.72 : 0.66, 0), Math.min(7.4, (PZ.explosion ? 4.0 : 3.0) * H.factorPantalla()), null, 1.05);
       H.UI.aviso(PZ.explosion ? "Vista explosionada de las piezas mecánicas" : "Piezas en su lugar", 1800);
     },
     ponerResto(r) {

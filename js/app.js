@@ -140,7 +140,7 @@
   }
 
   // ------------------------------------------------------------------ acciones
-  const VISTA_INICIO = () => orbita.volarA(new THREE.Vector3(0, 0.72, 0), 3.15, 0.72, 1.12);
+  const VISTA_INICIO = () => orbita.volarA(new THREE.Vector3(0, 0.72, 0), Math.min(7.2, 3.15 * H.factorPantalla()), 0.72, 1.12);
   let seleccion = null;
   const app = (H.app = {
     estado, anim, orbita, camara, renderer, escena,
@@ -170,7 +170,18 @@
       }
       const t = { foco: "foco", techos: "techos", levantar: "levantar", cables: "cables", rayosx: "rayosx", explosion: "explosion", conexiones: "conexiones", caja: "caja" };
       if (n === "inicio") { VISTA_INICIO(); app.seleccionar(null); return; }
-      if (n === "paneles") { app.set("paneles", !estado.paneles); document.body.classList.toggle("sin-paneles", !estado.paneles); return; }
+      if (n === "paneles") {
+        if (H.movil()) {                // celular: un panel a la vez (ninguno → izquierdo → derecho)
+          const b = document.body, sig = b.classList.contains("movil-izq") ? "der" : b.classList.contains("movil-der") ? "" : "izq";
+          b.classList.remove("movil-izq", "movil-der");
+          if (sig) b.classList.add("movil-" + sig);
+          estado.paneles = !!sig; sincronizarControles();
+          const pz = H.piezas && H.piezas.activo;
+          UI.aviso(!sig ? "Paneles ocultos" : sig === "izq" ? (pz ? "Ficha de la pieza" : "Controles") : (pz ? "Lista de piezas" : "Cuartos, componentes y cables"), 1400);
+          return;
+        }
+        app.set("paneles", !estado.paneles); document.body.classList.toggle("sin-paneles", !estado.paneles); return;
+      }
       if (t[n]) app.set(t[n], !estado[t[n]]);
     },
     seleccionar(id) {
@@ -432,7 +443,8 @@
   visibilidad();
   H.actualizarCableFoco();
   progreso(100);
-  orbita.radio = 4.2; orbita.theta = 1.1; orbita.phi = 1.05;
+  orbita.radio = Math.min(7.4, 4.2 * H.factorPantalla()); orbita.theta = 1.1; orbita.phi = 1.05;
+  if (H.movil()) { estado.paneles = false; sincronizarControles(); }      // en el celular se empieza viendo el modelo
   requestAnimationFrame((t) => {
     tAnt = t;
     cuadro(t);
