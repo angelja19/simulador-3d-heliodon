@@ -1,0 +1,21 @@
+PRUEBA DEL SIMULADOR 3D - HELIODÓN CON CABALLETES EN A (11/11/2026)
+MCP de Playwright (Chromium, ventana 1440 x 900), guion: herramientas\prueba_mcp_heliodonA.js
+RESULTADO: 68 de 68 OK · consola sin errores ni advertencias · ~51 cuadros/s con sombras en calidad alta
+
+OK  barra de abajo: Inicio, Foco, Techos, Levantar, Cables, Rayos X, Explosión, Conexiones, Caja, Arduino, Piezas, Paneles
+OK  graduador = |φ − δ| redondeado a 1°: Cochabamba (−17,4°) equinoccio 17° S (aro −17°) · 21/06 41° S · 21/12 6° N
+OK  7 botones de latitud, latitud, hora (08:00 → carro 60° al Este; 15:30 → 52,5° al Oeste), fecha, giro sobre la mesa
+OK  interruptores: foco, levantar, techos, etiquetas, cables, rayos X, explosión, conexiones, tapa de la caja
+OK  Simulación: sensor de temperatura apagado → «— °C»; sensor de luz apagado → «—»; encendidos de nuevo
+OK  3 pestañas: Cuartos, Componentes (47 piezas en 5 grupos), Cables (24 cables, 16 dentro de la caja)
+OK  aislar 5 piezas: 102 Caballete en A Este (40 × 758 × 1 050 mm), 201 Medio aro R480, 203 Chumacera UCP204,
+    207a Graduador (260 × 130 × 5 mm), 107c Llanta Ø100 — y «Volver» en cada una
+OK  aislar 3 cables con la cota de cada tramo: 314 foco (5 tramos), 315 alimentación 220 V (6 tramos), w_rele_in D4 (3 tramos)
+OK  vista del Arduino: 10 etiquetas; Relé → D4, 4,7 kΩ → D2, LED → D8, Bornera 1-Wire → D2, Arduino UNO, Portafusible,
+    Entrada de cables; «Aislar» desde la tarjeta
+OK  modo Piezas: al pasar el mouse se resalta y muestra «N° 107c Llanta Ø100 · Material: Poliuretano»; al tocar, tarjeta con «Aislar»
+OK  modo claro / oscuro, ayuda, teclas F T U M y Esc
+OK  calidad de sombras automática (alta → media → baja si baja de 40 cuadros/s); forzada a «baja» sin errores
+OK  todas las piezas del catálogo y todos los cables tienen modelo 3D
+
+Capturas: capturas\heliodonA_claro_1..9_*.png y capturas\heliodonA_oscuro_1..9_*.png

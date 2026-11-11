@@ -4,13 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Heliodón UMSS</title>
-<meta name="description" content="Simulador 3D interactivo del heliodón pequeño de la UMSS: aro, foco, maqueta con 5 cuartos, sensores BH1750 y DS18B20, caja del Arduino colgada con puerta frontal y todos sus cables.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A84FF'/%3E%3Ccircle cx='32' cy='38' r='9' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M10 54a22 22 0 0 1 44 0M32 10v7M15 18l5 5M49 18l-5 5' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-<meta name="theme-color" content="#f5f6f8">
+<meta name="description" content="Simulador 3D del heliodón pequeño de la UMSS con caballetes en A: aro con escala horaria, graduador, foco, maqueta con 5 cuartos, caja del Arduino y todos sus cables, con modo Aislar como en SolidWorks.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23007AFF'/%3E%3Ccircle cx='32' cy='38' r='9' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M10 54a22 22 0 0 1 44 0M32 10v7M15 18l5 5M49 18l-5 5' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#f2f2f7">
 <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
-<!-- fondo con degradado (el lienzo 3D es transparente encima) -->
 <div id="fondo"></div>
 <div id="lienzo"></div>
 
@@ -19,7 +18,7 @@
   <div class="inicio-marca">
     <svg class="inicio-icono" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="36" r="9"/><path d="M8 52a24 24 0 0 1 48 0"/><path d="M32 10v6M14 18l4 4M50 18l-4 4"/></svg>
     <h1>Heliodón UMSS</h1>
-    <p>Simulador 3D del heliodón pequeño</p>
+    <p>Simulador 3D del heliodón pequeño · caballetes en A</p>
   </div>
   <div class="inicio-barra"><span id="inicio-progreso"></span></div>
 </div>
@@ -35,51 +34,58 @@
 </header>
 
 <!-- panel de controles (izquierda) -->
-<aside id="panel-controles" class="vidrio panel">
+<aside id="panel-controles" class="vidrio panel" aria-label="Controles">
   <h2>Controles</h2>
   <section>
     <h3>Sol</h3>
     <label class="fila-slider">
       <span class="etq">Latitud <b id="v-lat">−17,4°</b></span>
-      <input type="range" id="s-lat" min="-90" max="90" step="0.1" value="-17.4">
+      <input type="range" id="s-lat" min="-90" max="90" step="0.1" value="-17.4" aria-label="Latitud">
     </label>
     <div class="chips" id="chips-lat">
       <button data-lat="-17.4" class="chip">Cochabamba</button>
       <button data-lat="0" class="chip">Ecuador</button>
-      <button data-lat="-66.5" class="chip">Círculo polar</button>
-      <button data-lat="60" class="chip">Noruega</button>
+      <button data-lat="4.6" class="chip">Bogotá</button>
+      <button data-lat="40.4" class="chip">Madrid</button>
+      <button data-lat="59.9" class="chip">Oslo</button>
       <button data-lat="-90" class="chip">Polo Sur</button>
       <button data-lat="90" class="chip">Polo Norte</button>
     </div>
     <label class="fila-slider">
-      <span class="etq">Hora solar <b id="v-hora">10:00</b></span>
-      <input type="range" id="s-hora" min="6.5" max="17.5" step="0.05" value="10">
+      <span class="etq">Hora solar (carro) <b id="v-hora">10:00</b></span>
+      <input type="range" id="s-hora" min="7" max="17" step="0.25" value="10" aria-label="Hora solar">
     </label>
     <label class="fila-slider">
       <span class="etq">Fecha <b id="v-fecha">21/03 · δ 0,0°</b></span>
-      <input type="range" id="s-dia" min="1" max="365" step="1" value="80">
+      <input type="range" id="s-dia" min="1" max="365" step="1" value="80" aria-label="Fecha (día del año)">
     </label>
     <div class="chips" id="chips-fecha">
       <button data-dia="172" class="chip">21/06</button>
       <button data-dia="80" class="chip">Equinoccio</button>
       <button data-dia="355" class="chip">21/12</button>
     </div>
-    <div class="fila-toggle"><span>Foco encendido</span><label class="toggle"><input type="checkbox" id="t-foco" checked><span></span></label></div>
     <div class="lecturas">
       <div><span>Altura</span><b id="v-alt">—</b></div>
       <div><span>Azimut</span><b id="v-az">—</b></div>
-      <div><span>Graduador</span><b id="v-grad">—</b></div>
+      <div class="grad"><span>Graduador</span><b id="v-grad">—</b></div>
     </div>
+    <p class="nota" id="nota-grad">Graduador = |φ − δ| redondeado a 1°</p>
+    <div class="fila-toggle"><span>Foco encendido</span><label class="toggle"><input type="checkbox" id="t-foco" checked><span></span></label></div>
   </section>
   <section>
     <h3>Maqueta</h3>
     <label class="fila-slider">
       <span class="etq">Giro sobre la mesa <b id="v-giro">0°</b></span>
-      <input type="range" id="s-giro" min="-180" max="180" step="1" value="0">
+      <input type="range" id="s-giro" min="-180" max="180" step="1" value="0" aria-label="Giro de la maqueta">
     </label>
     <div class="fila-toggle"><span>Levantar del pin</span><label class="toggle"><input type="checkbox" id="t-levantar"><span></span></label></div>
     <div class="fila-toggle"><span>Techos</span><label class="toggle"><input type="checkbox" id="t-techos" checked><span></span></label></div>
-    <div class="fila-toggle"><span>Etiquetas de cuartos</span><label class="toggle"><input type="checkbox" id="t-etiquetas" checked><span></span></label></div>
+    <div class="fila-toggle"><span>Etiquetas</span><label class="toggle"><input type="checkbox" id="t-etiquetas" checked><span></span></label></div>
+  </section>
+  <section>
+    <h3>Simulación</h3>
+    <div class="fila-toggle"><span>Sensor de temperatura</span><label class="toggle verde"><input type="checkbox" id="t-simTemp" checked><span></span></label></div>
+    <div class="fila-toggle"><span>Sensor de luz</span><label class="toggle verde"><input type="checkbox" id="t-simLuz" checked><span></span></label></div>
   </section>
   <section>
     <h3>Vista</h3>
@@ -87,16 +93,18 @@
     <div class="fila-toggle"><span>Rayos X</span><label class="toggle"><input type="checkbox" id="t-rayosx"><span></span></label></div>
     <div class="fila-toggle"><span>Vista explosionada</span><label class="toggle"><input type="checkbox" id="t-explosion"><span></span></label></div>
     <div class="fila-toggle"><span>Solo conexiones</span><label class="toggle"><input type="checkbox" id="t-conexiones"><span></span></label></div>
-    <div class="fila-toggle"><span>Puerta de la caja abierta</span><label class="toggle"><input type="checkbox" id="t-caja"><span></span></label></div>
+    <div class="fila-toggle"><span>Tapa de la caja abierta</span><label class="toggle"><input type="checkbox" id="t-caja"><span></span></label></div>
+    <p class="nota" id="nota-calidad">Calidad de sombras: alta</p>
   </section>
 </aside>
 
-<!-- panel derecho: cuartos / componentes -->
-<aside id="panel-derecho" class="vidrio panel">
+<!-- panel derecho: cuartos / componentes / cables -->
+<aside id="panel-derecho" class="vidrio panel" aria-label="Cuartos, componentes y cables">
   <div class="segmentado" role="tablist">
-    <button class="activo" data-pestana="cuartos" role="tab">Cuartos</button>
-    <button data-pestana="componentes" role="tab">Componentes</button>
-    <button data-pestana="cables" role="tab">Cables</button>
+    <i class="seg-fondo"></i>
+    <button class="activo" data-pestana="cuartos" role="tab" aria-selected="true">Cuartos</button>
+    <button data-pestana="componentes" role="tab" aria-selected="false">Componentes</button>
+    <button data-pestana="cables" role="tab" aria-selected="false">Cables</button>
   </div>
   <div id="pestana-cuartos" class="pestana">
     <p class="nota" id="nota-cuartos">Luz y temperatura simuladas según la posición del foco.</p>
@@ -104,90 +112,79 @@
     <div class="leyenda-luz"><span>0 lx</span><i></i><span>10 000 lx</span></div>
   </div>
   <div id="pestana-componentes" class="pestana oculto">
-    <input type="search" id="buscar" placeholder="Buscar componente, pin o canal…" aria-label="Buscar componente">
+    <input type="search" id="buscar" placeholder="Buscar pieza, número o material…" aria-label="Buscar pieza">
+    <p class="nota">Todas las piezas del ensamble. Toque una para aislarla.</p>
     <div id="lista-componentes"></div>
   </div>
   <div id="pestana-cables" class="pestana oculto">
-    <p class="nota">Colores de los cables por tipo. Toque uno para resaltarlo.</p>
+    <p class="nota">Todos los cables, también los de la caja del Arduino. Toque uno para aislarlo.</p>
     <div id="lista-cables"></div>
   </div>
 </aside>
 
-<!-- dock -->
+<!-- barra de abajo (dock) -->
 <nav id="dock" class="vidrio" aria-label="Herramientas">
-  <button data-accion="inicio" title="Vista inicial"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M6 10v10h12V10"/></svg><span>Inicio</span></button>
-  <button data-accion="foco" title="Encender / apagar el foco"><svg viewBox="0 0 24 24"><path d="M9 17h6M10 20h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.9.7 1.5 1.6 1.5 2.6V17h4v-.5c0-1 .6-1.9 1.5-2.6A6 6 0 0 0 12 3z"/></svg><span>Foco</span></button>
-  <button data-accion="techos" title="Quitar / poner techos"><svg viewBox="0 0 24 24"><path d="M3 12l9-7 9 7"/><path d="M5 11v9h14v-9"/><path d="M9 20v-5h6v5"/></svg><span>Techos</span></button>
-  <button data-accion="levantar" title="Levantar la maqueta"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/><path d="M5 21h14"/></svg><span>Levantar</span></button>
+  <button data-accion="inicio" title="Vista inicial (Esc)"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M6 10v10h12V10"/></svg><span>Inicio</span></button>
+  <button data-accion="foco" title="Encender / apagar el foco (F)"><svg viewBox="0 0 24 24"><path d="M9 17h6M10 20h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.9.7 1.5 1.6 1.5 2.6V17h4v-.5c0-1 .6-1.9 1.5-2.6A6 6 0 0 0 12 3z"/></svg><span>Foco</span></button>
+  <button data-accion="techos" title="Quitar / poner techos (T)"><svg viewBox="0 0 24 24"><path d="M3 12l9-7 9 7"/><path d="M5 11v9h14v-9"/><path d="M9 20v-5h6v5"/></svg><span>Techos</span></button>
+  <button data-accion="levantar" title="Levantar la maqueta (L)"><svg viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/><path d="M5 21h14"/></svg><span>Levantar</span></button>
   <span class="separador"></span>
-  <button data-accion="cables" title="Mostrar / ocultar cables"><svg viewBox="0 0 24 24"><path d="M4 18c4 0 4-12 8-12s4 12 8 12"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="18" r="1.6"/></svg><span>Cables</span></button>
-  <button data-accion="rayosx" title="Rayos X"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Rayos X</span></button>
-  <button data-accion="explosion" title="Vista explosionada"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="6" height="6" rx="1.5"/><path d="M5 5l2.5 2.5M19 5l-2.5 2.5M5 19l2.5-2.5M19 19l-2.5-2.5"/></svg><span>Explosión</span></button>
-  <button data-accion="conexiones" title="Solo conexiones"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="6" height="6" rx="1.5"/><rect x="15" y="4" width="6" height="5" rx="1.5"/><rect x="15" y="15" width="6" height="5" rx="1.5"/><path d="M9 12h3v-5.5h3M12 12v5.5h3"/></svg><span>Conexiones</span></button>
-  <button data-accion="caja" title="Abrir la puerta frontal de la caja del Arduino"><svg viewBox="0 0 24 24"><path d="M4 5h11v15H4z"/><path d="M15 5l5 2v15l-5-2"/><circle cx="17.5" cy="13" r=".8"/></svg><span>Caja</span></button>
+  <button data-accion="cables" title="Mostrar / ocultar cables (C)"><svg viewBox="0 0 24 24"><path d="M4 18c4 0 4-12 8-12s4 12 8 12"/><circle cx="4" cy="18" r="1.6"/><circle cx="20" cy="18" r="1.6"/></svg><span>Cables</span></button>
+  <button data-accion="rayosx" title="Rayos X (X)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9l6 6M15 9l-6 6"/></svg><span>Rayos X</span></button>
+  <button data-accion="explosion" title="Vista explosionada (E)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="6" height="6" rx="1.5"/><path d="M5 5l2.5 2.5M19 5l-2.5 2.5M5 19l2.5-2.5M19 19l-2.5-2.5"/></svg><span>Explosión</span></button>
+  <button data-accion="conexiones" title="Solo conexiones (K)"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="6" height="6" rx="1.5"/><rect x="15" y="4" width="6" height="5" rx="1.5"/><rect x="15" y="15" width="6" height="5" rx="1.5"/><path d="M9 12h3v-5.5h3M12 12v5.5h3"/></svg><span>Conexiones</span></button>
+  <button data-accion="caja" title="Abrir la tapa de la caja del Arduino (A)"><svg viewBox="0 0 24 24"><path d="M4 6h12v14H4z"/><path d="M16 6l4 2v14l-4-2"/></svg><span>Caja</span></button>
+  <button data-accion="arduino" title="Ver por dentro la caja del Arduino (U)"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 6V4M11 6V4M15 6V4M7 18v2M11 18v2M15 18v2"/><rect x="8" y="9.5" width="6" height="5" rx="1"/></svg><span>Arduino</span></button>
   <span class="separador"></span>
-  <button data-accion="piezas" title="Modo Piezas: ver cada pieza mecánica con sus medidas (M)"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>Piezas</span></button>
+  <button data-accion="piezas" title="Piezas: resalta cada pieza al pasar el mouse y la aísla (M)"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>Piezas</span></button>
   <span class="separador"></span>
-  <button data-accion="paneles" title="Mostrar / ocultar paneles"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M9 5v14M15 5v14"/></svg><span>Paneles</span></button>
+  <button data-accion="paneles" title="Mostrar / ocultar paneles (P)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M9 5v14M15 5v14"/></svg><span>Paneles</span></button>
 </nav>
 
-<!-- modo Piezas: ficha de la pieza (izquierda) y lista de piezas (derecha) -->
-<aside id="panel-ficha" class="vidrio panel oculto" aria-label="Ficha de la pieza">
-  <div class="pz-cabeza"><span class="pz-cod" id="pz-cod">Ensamble</span><span class="pz-grupo" id="pz-grupo"></span></div>
-  <h2 id="pz-nombre">Heliodón pequeño</h2>
-  <p class="nota" id="pz-desc"></p>
-  <div class="pz-nav">
-    <button class="boton-icono" id="pz-ant" title="Pieza anterior (←)" aria-label="Pieza anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <span id="pz-pos">—</span>
-    <button class="boton-icono" id="pz-sig" title="Pieza siguiente (→)" aria-label="Pieza siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-  </div>
-  <div class="pz-botones">
-    <button class="pildora" id="pz-ensamble" title="Volver al ensamble completo (Esc)">Ensamble completo</button>
-    <button class="pildora secundaria" id="pz-salir" title="Salir del modo Piezas (M)">Salir</button>
-  </div>
-  <div class="chips" id="pz-instancias"></div>
-  <h3>Medidas</h3>
-  <div class="pz-tabla" id="pz-medidas"></div>
-  <div class="pz-datos" id="pz-datos"></div>
-  <div id="pz-pendientes"></div>
-  <h3>Origen de los datos</h3>
-  <p class="nota" id="pz-origen"></p>
-</aside>
-<aside id="panel-piezas" class="vidrio panel oculto" aria-label="Lista de piezas">
-  <h2>Piezas</h2>
-  <p class="nota">Solo piezas mecánicas (sin electrónica ni cables). Medidas en mm.</p>
-  <div class="segmentado-pz" id="pz-resto" role="group" aria-label="Resto del ensamble">
-    <button class="activo" data-resto="fantasma">Resto transparente</button>
-    <button data-resto="oculto">Resto oculto</button>
-  </div>
-  <div class="fila-toggle"><span>Cotas en 3D</span><label class="toggle"><input type="checkbox" id="pz-t-cotas" checked><span></span></label></div>
-  <div class="fila-toggle"><span>Vista explosionada</span><label class="toggle"><input type="checkbox" id="pz-t-exp"><span></span></label></div>
-  <input type="search" id="pz-buscar" placeholder="Buscar pieza, código o medida…" aria-label="Buscar pieza">
-  <div id="pz-lista"></div>
-</aside>
-<div id="pz-etiquetas"></div>
+<!-- tarjeta de la pieza elegida -->
+<div id="tarjeta-sel" class="vidrio" role="dialog" aria-label="Pieza elegida">
+  <div class="sel-cab"><span class="pz-cod" id="sel-cod">—</span><button class="cerrar" id="sel-cerrar" aria-label="Cerrar">×</button></div>
+  <div class="sel-nombre" id="sel-nombre"></div>
+  <div class="sel-mat" id="sel-mat"></div>
+  <div class="sel-ard" id="sel-ard"></div>
+  <button class="pildora" id="sel-aislar"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/></svg>Aislar</button>
+</div>
 
-<!-- etiquetas de cuartos, tooltip, aviso y ayuda -->
+<!-- modo Aislar -->
+<div id="aislado" class="oculto">
+  <aside id="ais-tarjeta" class="vidrio panel" aria-label="Datos de la pieza aislada">
+    <div class="pz-cabeza"><span class="pz-cod" id="ais-cod">—</span><span class="pz-grupo" id="ais-tipo"></span></div>
+    <h2 id="ais-nombre"></h2>
+    <p class="nota" id="ais-desc"></p>
+    <div class="ais-tabla" id="ais-filas"></div>
+    <div id="ais-extra"></div>
+    <button class="pildora ancho" id="ais-volver"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Volver al ensamble</button>
+  </aside>
+  <div id="ais-pista" class="vidrio">Arrastre para girar · rueda para acercar · botón derecho para mover · Esc para volver</div>
+</div>
+<div id="ais-etq"></div>
+
+<!-- etiquetas, tooltip, aviso y ayuda -->
 <div id="etiquetas"></div>
+<div id="etq-arduino"></div>
 <div id="tooltip" class="vidrio oculto"></div>
-<div id="aviso" class="vidrio oculto"></div>
+<div id="aviso" class="vidrio oculto" role="status"></div>
 <div id="ayuda" class="vidrio panel oculto" role="dialog" aria-label="Ayuda">
   <h2>Cómo usarlo</h2>
   <ul>
-    <li><b>Girar la cámara:</b> arrastre con el botón izquierdo. <b>Mover:</b> botón derecho o Mayús + arrastre. <b>Acercar:</b> rueda del mouse.</li>
-    <li><b>Latitud:</b> arrastre arriba o abajo la manija en T del graduador (lado Este) o use el control.</li>
-    <li><b>Hora:</b> arrastre el foco a lo largo del aro.</li>
-    <li><b>Girar la maqueta:</b> arrástrela hacia los lados.</li>
-    <li><b>Caja del Arduino:</b> cuelga bajo el tubo que sostiene la mesa, junto al pin central. El botón «Caja» abre su puerta frontal (la de los 3 LED).</li>
-    <li><b>Información:</b> pase el mouse sobre cualquier pieza o cable. En «Componentes», toque uno para ir hacia él.</li>
-    <li><b>Piezas:</b> el botón «Piezas» (o la tecla M) separa cada pieza mecánica: tóquela para aislarla y ver sus cotas en mm, su material, masa y cantidad. ← → pasan de pieza.</li>
-    <li><b>Teclas:</b> F foco · T techos · L levantar · C cables · X rayos X · E explosión · K conexiones · A caja · M piezas · Esc vista inicial.</li>
+    <li><b>Girar la cámara:</b> arrastre con el botón izquierdo. <b>Mover:</b> botón derecho o Mayús + arrastre. <b>Acercar:</b> rueda.</li>
+    <li><b>Latitud:</b> el aro se inclina en el graduador = |φ − δ| redondeado a 1°. También puede arrastrar la manija naranja del graduador (por fuera de la A Este).</li>
+    <li><b>Hora:</b> arrastre el carro por el aro; su índice rojo marca la hora en la escala (7 a 17 h).</li>
+    <li><b>Fecha:</b> mueve el foco en el arco de declinación (21/06, equinoccio, 21/12).</li>
+    <li><b>Piezas:</b> con el botón «Piezas», al pasar el mouse cada pieza se resalta. Tóquela y pulse <b>Aislar</b> para verla sola con sus cotas. «Volver» regresa.</li>
+    <li><b>Cables:</b> toque un cable (o en la pestaña Cables) para aislarlo con el largo de cada tramo.</li>
+    <li><b>Arduino:</b> el botón «Arduino» acerca la cámara a la caja y deja ver por dentro cada componente.</li>
+    <li><b>Teclas:</b> F foco · T techos · L levantar · C cables · X rayos X · E explosión · K conexiones · A caja · U Arduino · M piezas · P paneles · Esc volver.</li>
   </ul>
   <button class="pildora" id="b-cerrar-ayuda">Entendido</button>
 </div>
 
 <script src="lib/three.min.js"></script>
-<script src="js/datos_generados.js"></script>
 <script src="js/datos.js"></script>
 <script src="js/geometria.js"></script>
 <script src="js/simulacion.js"></script>
@@ -195,7 +192,7 @@
 <script src="js/electronica.js"></script>
 <script src="js/camara.js"></script>
 <script src="js/interfaz.js"></script>
-<script src="js/piezas.js"></script>
+<script src="js/aislar.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

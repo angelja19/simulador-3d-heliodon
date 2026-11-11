@@ -1,0 +1,6 @@
+# Archivos locales que no se publican
+herramientas/
+QR_simulador.png
+capturas/*
+!capturas/heliodonA_*.png
+!capturas/resultado_*heliodonA*.txt
