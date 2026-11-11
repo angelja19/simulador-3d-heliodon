@@ -20,6 +20,13 @@
     const U = Math.sin(f) * Math.sin(d) + Math.cos(f) * Math.cos(d) * Math.cos(w);
     return new THREE.Vector3(E, U, -N);
   };
+  /** Graduador del aro = |φ − δ| redondeado a 1°. valor con signo: − = Sur, + = Norte (como la latitud). */
+  H.graduador = function (lat, decl) {
+    const g = lat - decl;
+    const valor = Math.max(-90, Math.min(90, Math.sign(g) * Math.round(Math.abs(g))));
+    const texto = valor === 0 ? "0°" : Math.abs(valor) + "° " + (valor > 0 ? "N" : "S");
+    return { exacto: g, valor, texto };
+  };
   H.alturaAzimut = function (dir) {
     const alt = gra(Math.asin(Math.max(-1, Math.min(1, dir.y))));
     let az = gra(Math.atan2(dir.x, -dir.z));          // 0 = Norte, 90 = Este

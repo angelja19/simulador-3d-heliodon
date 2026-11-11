@@ -17,60 +17,36 @@
     pcbMorado: 0x3a2f8f, laton: 0xc8a74a, techo: 0xb85a3c, vidrio: 0x9fd4ff, madera: 0xb08458, foco: 0xfff2c8,
   };
 
-  // ------------------------------------------------------------------ medidas del ensamble de SolidWorks (diseño del 05/11/2026)
-  // Salen de datos_generados.js (DATOS_ENSAMBLE: cajas de cada componente y recorridos de los cables); si faltan se usan
-  // los valores del diseño: estructura 1200 x 950 sin diagonales con marco cuadrado a 520 mm, caja colgada del tubo 105.
-  const ENS = window.DATOS_ENSAMBLE || {};
-  const DIS = ENS.diseno || {};
-  const est = DIS.estructura || {};
-  const cj = DIS.caja || {};
+  // ------------------------------------------------------------------ medidas del ensamble de SolidWorks (caballetes en A, 10-11/11/2026)
+  // Salen de a\macros\diseno_caballetes_A.json y de verificacion.txt (45_verificar_A.py y 49_verificar_cables.py).
+  // Estructura de 1200 x 1050 mm en tubo galvanizado 40 x 40 x 1,2: una A en cada extremo (Este y Oeste), unidas
+  // solo por el tubo superior E-O (105, bajo la mesa) y dos tubos inferiores a ras del piso (113). Centro libre.
   H.DIM = {
-    largo: est.largo || 1200, ancho: est.ancho || 950,
-    zLarg: (est.z_largueros || [435, 475]).reduce((a, b) => a + b) / 2,        // eje de los largueros (455)
-    zLargIn: (est.z_largueros || [435, 475])[0],                                 // cara interior (435)
-    zMont: (est.z_montantes || [400, 440]).reduce((a, b) => a + b) / 2,         // eje de los montantes (420)
-    zMontIn: (est.z_montantes || [400, 440])[0], zMontOut: (est.z_montantes || [400, 440])[1],
-    yMarco: est.y_marco_medio || 520,
-    xRueda: est.x_ruedas || 550, zRueda: est.z_ruedas || 455,
-    caja: { x: cj.x || [25, 225], y: cj.y || [682, 822], z: cj.z || [-70, 70], bisagra: cj.bisagra || [21, 76],
-      abrazaderas: cj.abrazaderas_x || [[95, 115], [195, 215]] },
-    usbPanel: DIS.usb_panel || [-600, 230, -420], pg9: DIS.prensaestopas_220V || [600, 300, 420],
-    masa: ENS.masa_kg || null,
-    // radio de la mesa giratoria 302 (Ø640 desde el 05/11/2026: recortada para el aro a 90° N / 90° S)
-    rMesa: (((ENS.componentes || []).find((c) => /^302_/.test(c.archivo)) || {}).caja || [0, 0, 0, 320])[3],
-    latMax: 90,                              // el aro se inclina de 90° N a 90° S (límite simétrico en SolidWorks)
-    // tubos de la estructura 25x25x2 desde el 05/11/2026 (antes 40x40 y 30x30)
-    tubo: (est.tubo || [25, 2])[0],
-    xCab: (est.x_caballetes || [575, 600]).reduce((a, b) => a + b) / 2,      // eje de los caballetes (587,5)
-    yBase: (est.y_base || [144, 169]).reduce((a, b) => a + b) / 2,           // eje de la base (156,5)
-    yBaseTop: (est.y_base || [144, 169])[1],
-    yTS: (est.y_travesano_sup || [865, 890]).reduce((a, b) => a + b) / 2,    // travesaño superior (877,5)
-    y105: (est.y_tubo_105 || [840, 865]).reduce((a, b) => a + b) / 2,        // tubo 105 (852,5)
-    xCh: est.x_chumaceras || 584, yChBase: est.y_chumacera_base || 890,
+    largo: 1200, ancho: 1050, tubo: 40, pared: 1.2,
+    xA: 580, xA0: 560, xA1: 600,                 // eje de las A (x 560..600)
+    yBase: 162, yBase0: 142, yBase1: 182, zBase: 525,
+    zPie: 465, yPunta: 899.7, yPlaca: [899.7, 901.7], anguloPata: 32.94, largoPata: 855.2,
+    yTrav: 380, yTrav0: 360, yTrav1: 400,          // travesaño de cada A
+    ySup: 845, ySup0: 825, ySup1: 865,             // tubo superior E-O (105)
+    zInf: 470, xRueda: 540, zRueda: 470,           // tubos inferiores (113) y ruedas
+    yEje: 935, rMesa: 350, yMesa0: 882, yMesa1: 900, rAro: 480, dAro: 38,
+    caja: { x: [420, 560], y: [310, 450], z: [-100, 100] },
+    latMax: 90, masa: 35.02,
   };
-  /** Desplazamiento de la caja del Arduino: la caja y su interior se dibujan en coordenadas locales (x −100..100,
-   *  y 180..320) y el grupo se coloca en su lugar real colgado del tubo 105 (x 25..225, y 682..822). */
-  H.DIM.cajaOff = [H.DIM.caja.x[0] + 100, H.DIM.caja.y[0] - 180, 0];
-  /** Punto local de la caja (mm) -> punto global (mm). */
-  H.G = (p) => [p[0] + H.DIM.cajaOff[0], p[1] + H.DIM.cajaOff[1], p[2] + H.DIM.cajaOff[2]];
-  /** Punto global (mm) -> punto local de la caja (mm). */
-  H.L = (p) => [p[0] - H.DIM.cajaOff[0], p[1] - H.DIM.cajaOff[1], p[2] - H.DIM.cajaOff[2]];
-  /** Recorrido de un cable modelado en SolidWorks (pieza '308d', '310', '311', '312'; k = número de cable en la pieza). */
-  H.rutaSW = function (pieza, k = 0, respaldo = null) {
-    const c = DIS.cables && DIS.cables[pieza] && DIS.cables[pieza][k];
-    return c ? c.puntos.map((p) => p.slice()) : respaldo;
-  };
-  H.largoSW = function (pieza, k = 0) {
-    const c = DIS.cables && DIS.cables[pieza] && DIS.cables[pieza][k];
-    return c ? c.largo_mm : null;
-  };
-  /** Caja (mm) de todos los componentes del ensamble cuyo archivo empieza por 'pref'. */
-  H.cajaSW = function (pref) {
-    const cs = (ENS.componentes || []).filter((c) => c.archivo.startsWith(pref) && c.caja);
-    if (!cs.length) return null;
-    const b = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
-    cs.forEach((c) => { for (let i = 0; i < 3; i++) { b[i] = Math.min(b[i], c.caja[i]); b[i + 3] = Math.max(b[i + 3], c.caja[i + 3]); } });
-    return b;
+  /** |z| del eje de una pata de la A a la altura y (mm): del pie (z 465, y 182) a la punta (z 0, y 899,7). */
+  H.zPata = (y) => (465 * (899.7 - y)) / 717.7;
+  /** Largo (mm) de una polilínea en mm. */
+  H.largoPoli = (pts) => pts.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1], p[2] - pts[i][2]), 0);
+  /** Punto a la mitad (por largo) de una polilínea en mm. */
+  H.mitadPoli = function (pts) {
+    const L = H.largoPoli(pts) / 2;
+    let acc = 0;
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i], d = Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]);
+      if (acc + d >= L && d > 0) { const t = (L - acc) / d; return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+      acc += d;
+    }
+    return pts[pts.length - 1].slice();
   };
 
   // ------------------------------------------------------------------ registro de componentes
