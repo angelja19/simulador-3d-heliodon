@@ -31,7 +31,7 @@ NOVEDADES (11/11/2026)
   - Archivos nuevos: jsislar.js. Se quitaron piezas.js y
     datos_generados.js (eran del diseño de marco cuadrado).
   - Prueba: herramientas\prueba_mcp_heliodonA.js (MCP de Playwright)
-    -> capturasesultado_prueba_mcp_heliodonA.txt
+    -> capturas\resultado_prueba_mcp_heliodonA.txt
 
   Teclas: F foco · T techos · L levantar · C cables · X rayos X ·
   E explosión · K conexiones · A caja · U Arduino · M piezas ·
