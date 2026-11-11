@@ -1,5 +1,47 @@
 ==================================================================
   HELIODÓN UMSS - SIMULADOR 3D DEL HELIODÓN PEQUEÑO
+  (diseño del 10-11/11/2026: CABALLETES EN A, 120 x 105 x 90 cm,
+   tubo galvanizado 40 x 40 x 1,2, cables por dentro de los tubos)
+==================================================================
+
+ABRIR
+-----
+  Doble clic en index.html (Brave, Chrome, Edge o Firefox) o en línea:
+  https://angelja19.github.io/simulador-3d-heliodon/
+  Funciona sin internet: Three.js está en la carpeta lib.
+
+NOVEDADES (11/11/2026)
+----------------------
+  - Estructura en A: una A en cada extremo (base N-S 1050, patas a
+    32,9°, travesaño a 380 mm), tubo superior E-O bajo la mesa y dos
+    tubos inferiores; el centro queda libre. 4 ruedas Ø100.
+  - Medio aro R480 de tubo Ø38 con la escala horaria (rayas cada hora,
+    media hora y cuarto; números 7 a 17; topes rojos 6:45 y 17:15) y
+    el índice rojo del carro.
+  - Graduador por fuera de la A Este = |φ − δ| redondeado a 1°
+    (antes redondeaba a 5° y marcaba 15° S en vez de 17° S).
+  - Caja del Arduino en el travesaño de la A Este con tapa; botón
+    «Arduino»: la tapa se vuelve transparente y cada componente dice
+    qué hace y a qué pin va.
+  - Botón «Piezas» y modo «Aislar» (como en SolidWorks) para TODAS
+    las piezas y TODOS los cables, con cotas y tarjeta. «Volver» o Esc.
+  - Sección «Simulación»: sensor de temperatura y sensor de luz.
+  - Panel derecho: Cuartos, Componentes (por grupo) y Cables.
+  - Calidad de sombras automática (baja sola si la PC va lenta).
+  - Archivos nuevos: jsislar.js. Se quitaron piezas.js y
+    datos_generados.js (eran del diseño de marco cuadrado).
+  - Prueba: herramientas\prueba_mcp_heliodonA.js (MCP de Playwright)
+    -> capturasesultado_prueba_mcp_heliodonA.txt
+
+  Teclas: F foco · T techos · L levantar · C cables · X rayos X ·
+  E explosión · K conexiones · A caja · U Arduino · M piezas ·
+  P paneles · Esc volver.
+
+==================================================================
+  (Lo que sigue es el texto del diseño anterior, de marco cuadrado)
+==================================================================
+==================================================================
+  HELIODÓN UMSS - SIMULADOR 3D DEL HELIODÓN PEQUEÑO
   (diseño del 05/11/2026: marco cuadrado, 95 cm de ancho, tubos de
    25x25, aro de 90° N a 90° S y caja del Arduino colgada con puerta)
 ==================================================================
